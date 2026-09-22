@@ -1,0 +1,9 @@
+# Gust leaves these wherever it runs; all regenerable
+.gust/
+*.out/
+*.out.prev/
+
+.DS_Store
+
+# the topic dir on the shelf, linked in
+_topic

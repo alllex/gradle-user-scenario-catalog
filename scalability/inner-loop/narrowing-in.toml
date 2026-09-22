@@ -1,0 +1,13 @@
+name = "narrowing-in"
+description = "Run a subproject's test class, then narrow to one test method. Only the request is narrower."
+
+[[steps]]
+name = "run the whole test class"
+run.gradle = ":lib1:test --tests 'lib1.GreetingTest'"
+
+[[steps]]
+name = "narrow to the one test being worked on"
+run.gradle = ":lib1:test --tests 'lib1.GreetingTest.capitalizes'"
+
+[setup]
+layout.base = "../templates/java-application.toml"

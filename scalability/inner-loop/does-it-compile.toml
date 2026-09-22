@@ -1,0 +1,33 @@
+name = "does-it-compile"
+description = "A test run fails to compile the main source. Fix the error and compile, without running the tests yet."
+
+[[steps]]
+name = "the test run stops at a compilation error"
+run.gradle = { args = ":lib1:test --tests 'lib1.GreetingTest'", expect = "fail" }
+
+[[steps]]
+name = "correct the misspelled method call"
+
+  [[steps.edit]]
+  file = "lib1/src/main/java/lib1/Greeting.java"
+  replace = 'return greetng(name);'
+  with = 'return greeting(name);'
+
+[[steps]]
+name = "compile, without running the tests"
+run.gradle = ":lib1:compileJava"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites the template's main source with one that calls a method it spells wrong,
+# so :lib1:compileJava fails and the test task is never reached
+"lib1/src/main/java/lib1/Greeting.java" = '''
+package lib1;
+import org.apache.commons.lang3.StringUtils;
+public class Greeting {
+    public static String hello(String name) { return greetng(name); }
+    private static String greeting(String name) { return "Hello, " + StringUtils.capitalize(name) + "!"; }
+}
+'''

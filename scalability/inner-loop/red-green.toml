@@ -1,0 +1,34 @@
+name = "red-green"
+description = "A test fails on a wrong expectation. Correct it and run again. Only a test source changes."
+
+[[steps]]
+name = "the test fails on a wrong expectation"
+run.gradle = { args = ":lib1:test --tests 'lib1.GreetingTest'", expect = "fail" }
+
+[[steps]]
+name = "correct the expectation in the test"
+
+  [[steps.edit]]
+  file = "lib1/src/test/java/lib1/GreetingTest.java"
+  replace = '"Hi, World!"'
+  with = '"Hello, World!"'
+
+[[steps]]
+name = "run the same tests again"
+run.gradle = ":lib1:test --tests 'lib1.GreetingTest'"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites the template's passing test class with one whose first expectation is wrong
+"lib1/src/test/java/lib1/GreetingTest.java" = '''
+package lib1;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+class GreetingTest {
+    @Test void capitalizes() { assertEquals("Hi, World!", Greeting.hello("world")); }
+    @Test void keepsAnAlreadyCapitalName() { assertEquals("Hello, Ada!", Greeting.hello("Ada")); }
+    @Test void greetsAnEmptyName() { assertEquals("Hello, !", Greeting.hello("")); }
+}
+'''

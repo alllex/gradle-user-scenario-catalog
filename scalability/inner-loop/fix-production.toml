@@ -1,0 +1,32 @@
+name = "fix-production"
+description = "The tests fail because the code under test is wrong. Correct it and run again. Only a main source changes."
+
+[[steps]]
+name = "the tests fail on the greeting the code produces"
+run.gradle = { args = ":lib1:test --tests 'lib1.GreetingTest'", expect = "fail" }
+
+[[steps]]
+name = "correct the greeting in the main source"
+
+  [[steps.edit]]
+  file = "lib1/src/main/java/lib1/Greeting.java"
+  replace = 'return "Hi, " + StringUtils.capitalize(name) + "!";'
+  with = 'return "Hello, " + StringUtils.capitalize(name) + "!";'
+
+[[steps]]
+name = "run the same tests again"
+run.gradle = ":lib1:test --tests 'lib1.GreetingTest'"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites the template's correct main source with one that greets the wrong way,
+# so every test in GreetingTest fails until the one edit above lands
+"lib1/src/main/java/lib1/Greeting.java" = '''
+package lib1;
+import org.apache.commons.lang3.StringUtils;
+public class Greeting {
+    public static String hello(String name) { return "Hi, " + StringUtils.capitalize(name) + "!"; }
+}
+'''
