@@ -29,7 +29,7 @@ one.
 With [Gust](https://github.com/alllex/gust) on PATH, from the repository root:
 
 ```bash
-gust run scalability/inner-loop/narrowing-in.toml \
+gust run scalability/inner-loop/narrow-test.toml \
   --tmp --show-output -- --configuration-cache
 ```
 

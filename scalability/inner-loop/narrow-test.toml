@@ -1,4 +1,4 @@
-name = "narrowing-in"
+name = "narrow-test"
 description = "Run a subproject's test class, then narrow to one test method. Only the request is narrower."
 
 [[steps]]

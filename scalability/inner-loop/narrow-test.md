@@ -1,6 +1,6 @@
-# Narrowing in
+# Narrow to one test
 
-**Run the whole test class, then run the one test.**
+**Run the whole test class, then run the one test. Same project, fewer tests.**
 
 ## What happens
 
@@ -26,7 +26,7 @@ difference between a loop that feels immediate and one that does not.
 
 ## The scenario
 
-`narrowing-in.toml` — two runs, both expected to pass.
+`narrow-test.toml` — two runs, both expected to pass.
 
 ```bash
 gradle :lib1:test --tests 'lib1.GreetingTest'

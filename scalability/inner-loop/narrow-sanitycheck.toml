@@ -1,0 +1,39 @@
+name = "narrow-sanitycheck"
+description = "A broad quality check fails. Rerun it for one subproject to read the failure, fix it, and rerun the same narrow check."
+
+[[steps]]
+name = "the broad check fails somewhere in the build"
+run.gradle = { args = "sanityCheck", expect = "fail" }
+
+[[steps]]
+name = "the same check for one subproject fails on its own"
+run.gradle = { args = ":lib1:sanityCheck", expect = "fail" }
+
+[[steps]]
+name = "wrap the long line"
+
+  [[steps.edit]]
+  file = "lib1/src/main/java/lib1/Greeting.java"
+  replace = '        return "Hello, " + StringUtils.capitalize(name) + "!" + " Welcome to the neighbourhood, friend.";'
+  with = '''        return "Hello, " + StringUtils.capitalize(name) + "!"
+            + " Welcome to the neighbourhood, friend.";'''
+
+[[steps]]
+name = "run the narrow check again"
+run.gradle = ":lib1:sanityCheck"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites the template's main source with one whose greeting runs past 100 columns,
+# so Checkstyle fails in lib1 and nowhere else
+"lib1/src/main/java/lib1/Greeting.java" = '''
+package lib1;
+import org.apache.commons.lang3.StringUtils;
+public class Greeting {
+    public static String hello(String name) {
+        return "Hello, " + StringUtils.capitalize(name) + "!" + " Welcome to the neighbourhood, friend.";
+    }
+}
+'''
