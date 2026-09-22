@@ -27,6 +27,8 @@ layout.base = "../templates/java-application.toml"
 package lib1;
 import org.apache.commons.lang3.StringUtils;
 public class Greeting {
-    public static String hello(String name) { return "Hi, " + StringUtils.capitalize(name) + "!"; }
+    public static String hello(String name) {
+        return "Hi, " + StringUtils.capitalize(name) + "!";
+    }
 }
 '''

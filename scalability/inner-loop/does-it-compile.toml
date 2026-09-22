@@ -28,6 +28,8 @@ package lib1;
 import org.apache.commons.lang3.StringUtils;
 public class Greeting {
     public static String hello(String name) { return greetng(name); }
-    private static String greeting(String name) { return "Hello, " + StringUtils.capitalize(name) + "!"; }
+    private static String greeting(String name) {
+        return "Hello, " + StringUtils.capitalize(name) + "!";
+    }
 }
 '''
