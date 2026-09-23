@@ -1,20 +1,22 @@
-# Template project for the inner-loop scenarios.
+# Template project for the scenarios.
 #
-# A Java application at the root with two library subprojects: lib2 depends on lib1,
+# A Java application at the root with three library subprojects: lib2 depends on lib1,
 # and the application depends on both. Shared test and quality configuration comes from
 # a java-conventions plugin in the build-logic included build. Dependencies come from
 # Maven Central through a version catalog.
 #
-# Checkstyle runs in every project, against one rule: no line over 100 columns. A
-# sanityCheck task collects the Checkstyle tasks without depending on test, so code
-# quality can be checked across the build without running any tests.
+# Checkstyle runs in every project that applies the conventions, against one rule: no
+# line over 100 columns. A sanityCheck task collects the Checkstyle tasks without
+# depending on test, so code quality can be checked without running any tests.
 #
-# Shaped for scenarios where the build definition never changes and only the
-# invocation or the sources do:
+# Shaped so that a scenario has something to change:
 #   - lib1 carries a test class with three methods, so narrowing from the class to
 #     one method is a real narrowing.
 #   - Greeting.hello is exercised by all three of them, so an edit to the main
 #     source moves every test at once.
+#   - lib2 does not depend on the version catalog's library, so a scenario can add it.
+#   - lib3 has not adopted java-conventions, so a scenario can apply it. Its test
+#     needs JUnit, which arrives only with the conventions.
 #
 # The configuration cache is left unset.
 
@@ -23,7 +25,7 @@
 pluginManagement { includeBuild("build-logic") }
 dependencyResolutionManagement { repositories { mavenCentral() } }
 rootProject.name = "java-application"
-include("lib1", "lib2")
+include("lib1", "lib2", "lib3")
 '''
 
 "config/checkstyle/checkstyle.xml" = '''
@@ -59,6 +61,12 @@ dependencies { implementation(libs.commons.lang3) }
 "lib2/build.gradle.kts" = '''
 plugins { id("java-conventions") }
 dependencies { implementation(project(":lib1")) }
+'''
+
+# lib3 has not adopted the shared conventions: plain java, so no JUnit and no
+# Checkstyle. Scenarios that apply java-conventions to a project start here.
+"lib3/build.gradle.kts" = '''
+plugins { java }
 '''
 
 "build-logic/settings.gradle.kts" = '''
@@ -123,6 +131,26 @@ class GreetingTest {
     @Test void capitalizes() { assertEquals("Hello, World!", Greeting.hello("world")); }
     @Test void keepsAnAlreadyCapitalName() { assertEquals("Hello, Ada!", Greeting.hello("Ada")); }
     @Test void greetsAnEmptyName() { assertEquals("Hello, !", Greeting.hello("")); }
+}
+'''
+
+"lib3/src/main/java/lib3/Counter.java" = '''
+package lib3;
+public class Counter {
+    public static int words(String text) {
+        return text.isBlank() ? 0 : text.trim().split("\\s+").length;
+    }
+}
+'''
+
+# lib3's test needs JUnit, which only the conventions plugin provides.
+"lib3/src/test/java/lib3/CounterTest.java" = '''
+package lib3;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+class CounterTest {
+    @Test void countsWords() { assertEquals(2, Counter.words("hello world")); }
+    @Test void countsNothingInBlankText() { assertEquals(0, Counter.words("   ")); }
 }
 '''
 
