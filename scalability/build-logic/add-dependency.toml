@@ -1,0 +1,35 @@
+name = "add-dependency"
+description = "Code in a subproject needs a library the subproject does not have. Add it to that build script and compile."
+
+[[steps]]
+name = "the new code does not compile without the library"
+run.gradle = { args = ":lib2:compileJava", expect = "fail" }
+
+[[steps]]
+name = "add the library to this subproject"
+
+  [[steps.edit]]
+  file = "lib2/build.gradle.kts"
+  replace = 'dependencies { implementation(project(":lib1")) }'
+  with = 'dependencies { implementation(project(":lib1")); implementation(libs.commons.lang3) }'
+
+[[steps]]
+name = "compile again"
+run.gradle = ":lib2:compileJava"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites lib2's main source with one that reaches for commons-lang3, which lib2
+# does not depend on yet, so it does not compile until the edit above lands
+"lib2/src/main/java/lib2/Shout.java" = '''
+package lib2;
+import lib1.Greeting;
+import org.apache.commons.lang3.StringUtils;
+public class Shout {
+    public static String shout(String name) {
+        return StringUtils.upperCase(Greeting.hello(name));
+    }
+}
+'''

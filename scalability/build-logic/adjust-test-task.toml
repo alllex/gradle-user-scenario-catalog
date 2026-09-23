@@ -1,0 +1,46 @@
+name = "adjust-test-task"
+description = "A test needs a setting the test task does not pass it. Adjust the test task in that build script and run the tests."
+
+[[steps]]
+name = "the test fails without the setting"
+run.gradle = { args = ":lib1:test --tests 'lib1.GreetingTest'", expect = "fail" }
+
+[[steps]]
+name = "pass the setting to the test task"
+
+  [[steps.edit]]
+  file = "lib1/build.gradle.kts"
+  replace = 'dependencies { implementation(libs.commons.lang3) }'
+  with = '''dependencies { implementation(libs.commons.lang3) }
+tasks.test { systemProperty("greeting.locale", "en") }'''
+
+[[steps]]
+name = "run the tests again"
+run.gradle = ":lib1:test --tests 'lib1.GreetingTest'"
+
+[setup]
+layout.base = "../templates/java-application.toml"
+
+[setup.layout.project]
+# overwrites lib1's test class with one whose tests read a system property the
+# test task does not set yet, so they fail until the edit above lands
+"lib1/src/test/java/lib1/GreetingTest.java" = '''
+package lib1;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+class GreetingTest {
+    private static String locale() {
+        return System.getProperty("greeting.locale", "unset");
+    }
+
+    @Test void capitalizes() {
+        assertEquals("en", locale());
+        assertEquals("Hello, World!", Greeting.hello("world"));
+    }
+
+    @Test void keepsAnAlreadyCapitalName() {
+        assertEquals("en", locale());
+        assertEquals("Hello, Ada!", Greeting.hello("Ada"));
+    }
+}
+'''

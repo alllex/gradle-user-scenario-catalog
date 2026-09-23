@@ -11,15 +11,17 @@ not how Gradle handles it.
 ```
 scalability/
   templates/     the toy project the scenarios are laid out from
-  inner-loop/    one .md and one .toml per scenario
+  inner-loop/    the build logic is untouched; a request or a source changes
+  build-logic/   a project's build script changes
 ```
 
-Each scenario is a pair: a `.md` describing it, beside a `.toml` that
+Each family directory lists its scenarios in a README. A scenario is a pair: a
+`.md` describing it, beside a `.toml` that
 [Gust](https://github.com/alllex/gust) runs.
 
 ## Toy projects, large-project scenarios
 
-The project in `templates/` is small: three projects and a build-logic included
+The project in `templates/` is small: four projects and a build-logic included
 build, a handful of tests. Each scenario is formulated for a very large build,
 where the module being worked in is one of hundreds, and exercised here on a toy
 one.

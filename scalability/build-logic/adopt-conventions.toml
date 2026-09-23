@@ -1,0 +1,21 @@
+name = "adopt-conventions"
+description = "A subproject has not adopted the build's shared conventions, so its tests cannot run. Apply the convention plugin and run them."
+
+[[steps]]
+name = "the tests do not compile without the shared setup"
+run.gradle = { args = ":lib3:test", expect = "fail" }
+
+[[steps]]
+name = "apply the shared conventions to this subproject"
+
+  [[steps.edit]]
+  file = "lib3/build.gradle.kts"
+  replace = 'plugins { java }'
+  with = 'plugins { id("java-conventions") }'
+
+[[steps]]
+name = "run the tests"
+run.gradle = ":lib3:test"
+
+[setup]
+layout.base = "../templates/java-application.toml"
