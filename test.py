@@ -11,11 +11,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 # Directory names that never hold scenarios, at any depth: tooling, and the
-# template projects scenarios lay out from.
+# template projects scenarios lay out from. A run also leaves a <scenario>.out
+# directory holding a whole laid-out project, which is skipped by suffix.
 SKIP = {".git", ".gust", "_topic", "templates"}
 MD_LINK = re.compile(r"\]\((?!\w+:)([^)#]+\.md)\)")  # relative .md links only
 
 failed: list[str] = []
+
+
+def skipped(path):
+    return any(p.name in SKIP or p.name.endswith(".out") for p in path.parents)
 
 
 def check(description, problems):
@@ -38,7 +43,7 @@ def catalog_files(suffix):
     are the SKIP directories and READMEs, and anything at the root itself."""
     return sorted(p for p in ROOT.rglob(f"*{suffix}")
                   if p.stem != "README" and p.parent != ROOT
-                  and not SKIP.intersection(q.name for q in p.parents))
+                  and not skipped(p))
 
 
 def check_pairs():
@@ -67,7 +72,7 @@ def check_names(tomls):
 def check_links():
     problems = []
     for md in sorted(ROOT.glob("**/*.md")):
-        if any(p.name in SKIP or p.name.endswith(".out") for p in md.parents):
+        if skipped(md):
             continue
         for lineno, line in enumerate(md.read_text().splitlines(), 1):
             problems += [f"{rel(md)}:{lineno}: dead link to {t}"
