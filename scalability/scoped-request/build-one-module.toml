@@ -1,3 +1,4 @@
+# See build-one-module.md
 name = "build-one-module"
 description = "Reviewing a colleague's branch: build the one module they changed, on a build with nothing warm."
 

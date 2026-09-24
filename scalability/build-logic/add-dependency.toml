@@ -1,3 +1,4 @@
+# See add-dependency.md
 name = "add-dependency"
 description = "Code in a subproject needs a library the subproject does not have. Add it to that build script and compile."
 

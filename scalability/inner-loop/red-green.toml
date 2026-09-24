@@ -1,3 +1,4 @@
+# See red-green.md
 name = "red-green"
 description = "A test fails on a wrong expectation. Correct it and run again. Only a test source changes."
 

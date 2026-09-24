@@ -1,3 +1,4 @@
+# See module-guard.md
 name = "module-guard"
 description = "A check that reads one module's files, run as its own job on every change, from a clean machine."
 

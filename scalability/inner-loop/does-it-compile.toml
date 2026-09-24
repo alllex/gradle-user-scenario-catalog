@@ -1,3 +1,4 @@
+# See does-it-compile.md
 name = "does-it-compile"
 description = "A test run fails to compile the main source. Fix the error and compile, without running the tests yet."
 

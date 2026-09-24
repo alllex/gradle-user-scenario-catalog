@@ -1,3 +1,4 @@
+# See adopt-conventions.md
 name = "adopt-conventions"
 description = "A subproject has not adopted the build's shared conventions, so its tests cannot run. Apply the convention plugin and run them."
 

@@ -1,3 +1,4 @@
+# See narrow-sanitycheck.md
 name = "narrow-sanitycheck"
 description = "A broad quality check fails. Rerun it for one subproject to read the failure, fix it, and rerun the same narrow check."
 
