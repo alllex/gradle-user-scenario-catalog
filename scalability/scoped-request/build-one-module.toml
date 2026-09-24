@@ -1,0 +1,9 @@
+name = "build-one-module"
+description = "Reviewing a colleague's branch: build the one module they changed, on a build with nothing warm."
+
+[[steps]]
+name = "compile the one subproject"
+run.gradle = ":lib1:compileJava"
+
+[setup]
+layout.base = "../templates/java-application.toml"

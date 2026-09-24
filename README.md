@@ -10,9 +10,10 @@ not how Gradle handles it.
 
 ```
 scalability/
-  templates/     the toy project the scenarios are laid out from
-  inner-loop/    the build logic is untouched; a request or a source changes
-  build-logic/   a project's build script changes
+  templates/        the toy project the scenarios are laid out from
+  inner-loop/       the build logic is untouched; a request or a source changes
+  build-logic/      a project's build script changes
+  scoped-request/   the request covers a small part of the build
 ```
 
 Each family directory lists its scenarios in a README. A scenario is a pair: a

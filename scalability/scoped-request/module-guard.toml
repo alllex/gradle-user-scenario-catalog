@@ -1,0 +1,9 @@
+name = "module-guard"
+description = "A check that reads one module's files, run as its own job on every change, from a clean machine."
+
+[[steps]]
+name = "run the subproject's own task"
+run.gradle = ":lib1:checkResources"
+
+[setup]
+layout.base = "../templates/java-application.toml"
