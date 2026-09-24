@@ -15,6 +15,8 @@
 #   - Greeting.hello is exercised by all three of them, so an edit to the main
 #     source moves every test at once.
 #   - lib2 does not depend on the version catalog's library, so a scenario can add it.
+#   - lib2 has tests of its own, and is built on lib1, so a scenario that touches
+#     lib2 leaves an upstream project and its work untouched.
 #   - lib3 has not adopted java-conventions, so a scenario can apply it. Its test
 #     needs JUnit, which arrives only with the conventions.
 #   - lib1 has a checkResources task of its own, which no other project has and
@@ -169,6 +171,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CounterTest {
     @Test void countsWords() { assertEquals(2, Counter.words("hello world")); }
     @Test void countsNothingInBlankText() { assertEquals(0, Counter.words("   ")); }
+}
+'''
+
+"lib2/src/test/java/lib2/ShoutTest.java" = '''
+package lib2;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+class ShoutTest {
+    @Test void shoutsAGreeting() { assertEquals("HELLO, WORLD!", Shout.shout("world")); }
+    @Test void shoutsACapitalName() { assertEquals("HELLO, ADA!", Shout.shout("Ada")); }
 }
 '''
 

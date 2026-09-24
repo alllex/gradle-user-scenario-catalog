@@ -3,44 +3,44 @@ description = "A test needs a setting the test task does not pass it. Adjust the
 
 [[steps]]
 name = "the test fails without the setting"
-run.gradle = { args = ":lib1:test --tests 'lib1.GreetingTest'", expect = "fail" }
+run.gradle = { args = ":lib2:test --tests 'lib2.ShoutTest'", expect = "fail" }
 
 [[steps]]
 name = "pass the setting to the test task"
 
   [[steps.edit]]
-  file = "lib1/build.gradle.kts"
-  replace = 'dependencies { implementation(libs.commons.lang3) }'
-  with = '''dependencies { implementation(libs.commons.lang3) }
-tasks.test { systemProperty("greeting.locale", "en") }'''
+  file = "lib2/build.gradle.kts"
+  replace = 'dependencies { implementation(project(":lib1")) }'
+  with = '''dependencies { implementation(project(":lib1")) }
+tasks.test { systemProperty("shout.locale", "en") }'''
 
 [[steps]]
 name = "run the tests again"
-run.gradle = ":lib1:test --tests 'lib1.GreetingTest'"
+run.gradle = ":lib2:test --tests 'lib2.ShoutTest'"
 
 [setup]
 layout.base = "../templates/java-application.toml"
 
 [setup.layout.project]
-# overwrites lib1's test class with one whose tests read a system property the
+# overwrites lib2's test class with one whose tests read a system property the
 # test task does not set yet, so they fail until the edit above lands
-"lib1/src/test/java/lib1/GreetingTest.java" = '''
-package lib1;
+"lib2/src/test/java/lib2/ShoutTest.java" = '''
+package lib2;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-class GreetingTest {
+class ShoutTest {
     private static String locale() {
-        return System.getProperty("greeting.locale", "unset");
+        return System.getProperty("shout.locale", "unset");
     }
 
-    @Test void capitalizes() {
+    @Test void shoutsAGreeting() {
         assertEquals("en", locale());
-        assertEquals("Hello, World!", Greeting.hello("world"));
+        assertEquals("HELLO, WORLD!", Shout.shout("world"));
     }
 
-    @Test void keepsAnAlreadyCapitalName() {
+    @Test void shoutsACapitalName() {
         assertEquals("en", locale());
-        assertEquals("Hello, Ada!", Greeting.hello("Ada"));
+        assertEquals("HELLO, ADA!", Shout.shout("Ada"));
     }
 }
 '''
