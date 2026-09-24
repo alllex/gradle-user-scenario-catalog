@@ -17,6 +17,8 @@
 #   - lib2 does not depend on the version catalog's library, so a scenario can add it.
 #   - lib3 has not adopted java-conventions, so a scenario can apply it. Its test
 #     needs JUnit, which arrives only with the conventions.
+#   - lib1 has a checkResources task of its own, which no other project has and
+#     whose work is confined to lib1.
 #
 # The configuration cache is left unset.
 
@@ -56,6 +58,18 @@ dependencies { implementation(project(":lib1")); implementation(project(":lib2")
 "lib1/build.gradle.kts" = '''
 plugins { id("java-conventions") }
 dependencies { implementation(libs.commons.lang3) }
+// A task of lib1's own: it reads files that live in lib1 and produces nothing
+// any other project consumes.
+tasks.register("checkResources") {
+    val messages = layout.projectDirectory.file("src/main/resources/messages.properties")
+    inputs.file(messages)
+    doLast {
+        require(messages.asFile.readText().contains("greeting=")) {
+            "messages.properties has no greeting"
+        }
+        println("resources ok")
+    }
+}
 '''
 
 "lib2/build.gradle.kts" = '''
@@ -121,6 +135,10 @@ public class Greeting {
         return "Hello, " + StringUtils.capitalize(name) + "!";
     }
 }
+'''
+
+"lib1/src/main/resources/messages.properties" = '''
+greeting=Hello
 '''
 
 "lib1/src/test/java/lib1/GreetingTest.java" = '''
