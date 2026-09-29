@@ -4,6 +4,7 @@
 *.out.prev/
 
 .DS_Store
+.idea/
 
 # the topic dir on the shelf, linked in
 _topic
