@@ -29,6 +29,7 @@ layout.base = "../templates/java-application.toml"
 [setup.layout.project]
 # overwrites the template's main source with one whose greeting runs past 100 columns,
 # so Checkstyle fails in lib1 and nowhere else
+# language=java
 "lib1/src/main/java/lib1/Greeting.java" = '''
 package lib1;
 import org.apache.commons.lang3.StringUtils;

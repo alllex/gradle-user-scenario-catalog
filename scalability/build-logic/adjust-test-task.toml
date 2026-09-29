@@ -25,6 +25,7 @@ layout.base = "../templates/java-application.toml"
 [setup.layout.project]
 # overwrites lib2's test class with one whose tests read a system property the
 # test task does not set yet, so they fail until the edit above lands
+# language=java
 "lib2/src/test/java/lib2/ShoutTest.java" = '''
 package lib2;
 import org.junit.jupiter.api.Test;

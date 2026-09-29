@@ -24,6 +24,7 @@ layout.base = "../templates/java-application.toml"
 [setup.layout.project]
 # overwrites the template's correct main source with one that greets the wrong way,
 # so every test in GreetingTest fails until the one edit above lands
+# language=java
 "lib1/src/main/java/lib1/Greeting.java" = '''
 package lib1;
 import org.apache.commons.lang3.StringUtils;

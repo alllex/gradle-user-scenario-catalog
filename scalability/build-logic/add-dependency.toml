@@ -24,6 +24,7 @@ layout.base = "../templates/java-application.toml"
 [setup.layout.project]
 # overwrites lib2's main source with one that reaches for commons-lang3, which lib2
 # does not depend on yet, so it does not compile until the edit above lands
+# language=java
 "lib2/src/main/java/lib2/Shout.java" = '''
 package lib2;
 import lib1.Greeting;

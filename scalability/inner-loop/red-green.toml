@@ -23,6 +23,7 @@ layout.base = "../templates/java-application.toml"
 
 [setup.layout.project]
 # overwrites the template's passing test class with one whose first expectation is wrong
+# language=java
 "lib1/src/test/java/lib1/GreetingTest.java" = '''
 package lib1;
 import org.junit.jupiter.api.Test;

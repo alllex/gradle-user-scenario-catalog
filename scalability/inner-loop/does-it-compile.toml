@@ -24,6 +24,7 @@ layout.base = "../templates/java-application.toml"
 [setup.layout.project]
 # overwrites the template's main source with one that calls a method it spells wrong,
 # so :lib1:compileJava fails and the test task is never reached
+# language=java
 "lib1/src/main/java/lib1/Greeting.java" = '''
 package lib1;
 import org.apache.commons.lang3.StringUtils;
